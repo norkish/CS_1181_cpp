@@ -20,6 +20,8 @@ char SE = EMPTY;
 
 int TOTAL_MOVES = 9;
 
+string chooseRandomCell();
+
 /**
  * Utility function to print the current status of the board
  */
@@ -27,37 +29,6 @@ void printBoard(){
     cout << endl << NW << " " << N << " " << NE << endl <<
     W << " " << C << " " << E << endl <<
     SW << " " << S << " " << SE << endl << endl;
-}
-
-/**
- * Randomly selects an empty cell from NW, W, SW, N, C, S, NE, E, SE
- * If chosen cell is not empty, function is recursively called until empty cell is chosen
- * @return a string representing the chosen cell
- */
-string chooseRandomCell() {
-    int randomNum = rand() % 9;
-
-    if (randomNum == 0 && NW == EMPTY) {
-        return "NW";
-    } else if (randomNum == 1 && W == EMPTY) {
-         return "W";
-    } else if (randomNum == 2 && SW == EMPTY) {
-        return "SW";
-    } else if (randomNum == 3 && N == EMPTY) {
-        return "N";
-    } else if (randomNum == 4 && C == EMPTY) {
-        return "C";
-    } else if (randomNum == 5 && S == EMPTY) {
-        return "S";
-    } else if (randomNum == 6 && NE == EMPTY) {
-        return "NE";
-    } else if (randomNum == 7 && E == EMPTY) {
-        return "E";
-    } else if (SE == EMPTY) {
-        return "SE";
-    } else {
-        return chooseRandomCell();
-    }
 }
 
 /**
@@ -150,8 +121,6 @@ char makeMoves(char currentPlayer, int movesLeft) {
         return DRAW;
     }
 
-    printBoard();
-
     cout << currentPlayer << "'s move (" << movesLeft << " moves left)" << endl;
     string chosenCell;
 
@@ -160,9 +129,10 @@ char makeMoves(char currentPlayer, int movesLeft) {
     } else {
         chosenCell = chooseRandomCell();
     }
-    cout << currentPlayer << " chose " << chosenCell << endl;
 
     setCell(chosenCell, currentPlayer);
+
+    printBoard();
 
     bool winner = checkForWinner(currentPlayer);
 
@@ -170,6 +140,37 @@ char makeMoves(char currentPlayer, int movesLeft) {
         return currentPlayer;
     } else {
         return makeMoves(currentPlayer == USER ? COMP : USER, movesLeft - 1);
+    }
+}
+
+/**
+ * Randomly selects an empty cell from NW, W, SW, N, C, S, NE, E, SE
+ * If chosen cell is not empty, function is recursively called until empty cell is chosen
+ * @return a string representing the chosen cell
+ */
+string chooseRandomCell() {
+    int randomNum = rand() % 9;
+
+    if (randomNum == 0 && NW == EMPTY) {
+        return "NW";
+    } else if (randomNum == 1 && W == EMPTY) {
+         return "W";
+    } else if (randomNum == 2 && SW == EMPTY) {
+        return "SW";
+    } else if (randomNum == 3 && N == EMPTY) {
+        return "N";
+    } else if (randomNum == 4 && C == EMPTY) {
+        return "C";
+    } else if (randomNum == 5 && S == EMPTY) {
+        return "S";
+    } else if (randomNum == 6 && NE == EMPTY) {
+        return "NE";
+    } else if (randomNum == 7 && E == EMPTY) {
+        return "E";
+    } else if (SE == EMPTY) {
+        return "SE";
+    } else {
+        return chooseRandomCell();
     }
 }
 
@@ -199,8 +200,6 @@ int playTicTacToe(int numGamesLeft) {
 
     int winCount = 0;
 
-
-
     if (winner == USER) {
         cout << "YOU WIN!" << endl;
         winCount++;
@@ -210,7 +209,6 @@ int playTicTacToe(int numGamesLeft) {
         cout << "COMPUTER WINS" << endl;
     }
 
-    printBoard();
     cout << "******************" << endl << endl;
 
     resetBoard();
