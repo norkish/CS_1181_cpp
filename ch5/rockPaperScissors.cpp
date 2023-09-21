@@ -22,20 +22,23 @@ bool computerWins(char compChoice, char userChoice) {
            (compChoice == 's' && userChoice == 'p');
 }
 
-void declareWinner(char compChoice, char userChoice) {
+bool declareWinner(char compChoice, char userChoice) {
     if (computerWins(compChoice, userChoice)) {
         cout << "Computer wins" << endl;
     } else if (compChoice == userChoice) {
         cout << "Draw" << endl;
     } else {
         cout << "User wins" << endl;
+        return true;
     }
+
+    return false;
 }
 
-void executeRounds(int numRoundsLeft) {
+int executeRounds(int numRoundsLeft) {
 
     if (numRoundsLeft <= 0) {
-        return;
+        return 0;
     }
 
     char computerChoice = getComputerChoice();
@@ -48,18 +51,27 @@ void executeRounds(int numRoundsLeft) {
     cout << "I chose " << computerChoice << endl;
 
     //based on the computer's and user's choices, the winner is declared
-    declareWinner(computerChoice, userChoice);
+    bool userWins = declareWinner(computerChoice, userChoice);
 
-    executeRounds(numRoundsLeft - 1);
+    int userWinCount = executeRounds(numRoundsLeft - 1);
+
+    if (userWins) {
+        userWinCount = userWinCount + 1;
+    }
+
+    return userWinCount;
 }
 
 int main() {
     //the computer chooses R, P, or S (but doesn't share)
-    srand(time(nullptr));
+    //srand(time(nullptr));
 
     int numberOfRounds = 3;
 
-    executeRounds(numberOfRounds);
+    int userWinCount = executeRounds(numberOfRounds);
+
+    cout << "User won " << userWinCount << " out of " << numberOfRounds << " times ("
+            << (100.0 * userWinCount/numberOfRounds) << "%)" << endl;
 
     return 0;
 }
